@@ -1,13 +1,12 @@
-<html>
-  <head>
-    <title>{{ title }} - microblog</title>
-  </head>
-  <body>
+{% extends "base.html" %}
+{% block content %}
       <h1>Hello, {{ user.nickname }}!</h1>
+      {% for post in posts %}
+      <div><p>{{ post.author.nickname }} says: <b>{{ post.body }}</b></p></div>
+      {% endfor %}
       <h1>a = {{a}}<h1>
       <form action=add1 method=post>
         <dd><input type=submit value=Yes>
         </dl>
       </form>
-  </body>
-</html>
+{% endblock %}
