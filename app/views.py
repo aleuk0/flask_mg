@@ -24,6 +24,12 @@ def index():
   </body>
 '''
 
-def add1():
+@app.route('/yes', methods=['POST'])
+def yes():
     global a
     a += 1
+    user = {'nickname': 'Alexander'}  # fake user
+    return render_template('index.html',
+                           title='Home',
+                           user=user,
+                           a = a)
