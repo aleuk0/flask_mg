@@ -1,21 +1,35 @@
-from flask import render_template
+from flask import render_template, flash, redirect
 from app import app
+from .forms import LoginForm
 
-a = 1
+# index view function suppressed for brevity
 
 @app.route('/')
 @app.route('/index')
 def index():
-    global a
     user = {'nickname': 'Alexander'}  # fake user
     return render_template('index.html',
                            title='Home',
                            user=user,
-                           a = a)
+                           )
+
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    form = LoginForm()
+    if form.validate_on_submit():
+        flash('Login requested for OpenID="%s", remember_me=%s' %
+              (form.openid.data, str(form.remember_me.data)))
+        return redirect('/index')
+    return render_template('login.html',
+                           title='Sign In',
+                           form=form)
+
+
 '''
-можно разместить все тут(ниже), но мы рендерим шаблон с файла index.html
+UPD 1:
+можно разместить код html и тут (ниже), но мы рендерим шаблон с файла index.html
   <body>
-    <h1>a = ''' + str(a) + '''<h1>
+    <h1>a = ''' '+ str(a) +' '''<h1>
     <form action=add1 method=post>
     <dd><input type=submit value=Yes>
     </dl>
@@ -23,13 +37,3 @@ def index():
     <button onclick="add1()" type="button">перейти</button>
   </body>
 '''
-
-@app.route('/yes', methods=['POST'])
-def yes():
-    global a
-    a += 1
-    user = {'nickname': 'Alexander'}  # fake user
-    return render_template('index.html',
-                           title='Home',
-                           user=user,
-                           a = a)
